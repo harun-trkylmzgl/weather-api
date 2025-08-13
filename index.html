@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hava Durumu</title>
+  <style>
+    body {
+      background-color: #e0f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+      color: #333;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #00796b;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #004d40;
+    }
+
+    #result {
+      background-color: #ffffff;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 10px;
+      width: 320px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      color: #333;
+    }
+
+    #result h2 {
+      margin-top: 0;
+      color: #00796b;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hava Durumu Uygulaması</h1>
+  <input type="text" id="cityInput" placeholder="Şehir adı giriniz" />
+  <button onclick="getWeather()">Hava Durumunu Getir</button>
+
+  <div id="result"></div>
+
+  <script>
+    async function getWeather() {
+      const city = document.getElementById('cityInput').value;
+      if (!city) {
+        alert('Lütfen şehir adı giriniz!');
+        return;
+      }
+      try {
+        const response = await fetch(`http://localhost:3000/weather?city=${city}`);
+        const data = await response.json();
+
+        if (data.error) {
+          document.getElementById('result').innerText = data.error;
+        } else {
+          document.getElementById('result').innerHTML = `
+            <h2>${data.şehir}</h2>
+            <p><strong>Sıcaklık:</strong> ${data.sıcaklık}</p>
+            <p><strong>Açıklama:</strong> ${data.açıklama}</p>
+            <p><strong>Rüzgar Hızı:</strong> ${data.rüzgar}</p>
+          `;
+        }
+      } catch (e) {
+        document.getElementById('result').innerText = 'Hava durumu alınırken hata oluştu.';
+      }
+    }
+  </script>
+</body>
+</html>
